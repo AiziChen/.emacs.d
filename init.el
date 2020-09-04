@@ -121,3 +121,9 @@
     (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
     (add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
     ))
+
+(require 'infodoc-theme)
+;(autoload 'infodoc-theme)
+(load-theme 'infodoc t t)
+(enable-theme 'infodoc)
+

@@ -8,11 +8,11 @@ If you like it, you can press the star, it will me gratifying, thank you. :)
 * paredit  -- for scheme
 * geiser   -- for scheme
 * parenface  -- show lighter parentheses
-* use-package -- make install packages automatically and make manage packages easly
-* ace-window  -- make switch windows clearly and equickly
-* info-doc   -- a beautiful theme, and the make the frame-faces less-injure our eyes.
-* company   -- a very useful auto-code-compelete plugin
-* org-bullets  -- a plugin that can make org-mode docs beautiful
+* use-package -- make install packages automatically and make packages management easly
+* ace-window  -- make switch windows clearly and quickly
+* info-doc   -- a beautiful theme, and make the frame-faces less-injure to our eyes
+* company   -- a very useful auto-code-compeletion plugin
+* org-bullets  -- a plugin that can make org-mode document face beautiful
 
 
 ## ScreenShoot

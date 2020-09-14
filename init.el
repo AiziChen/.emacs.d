@@ -66,7 +66,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages '(paredit geiser company org-bullets)))
+ '(package-selected-packages '(ace-window paredit geiser company org-bullets)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -122,8 +122,20 @@
     (add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
     ))
 
+;;; Themes
 (require 'infodoc-theme)
 ;(autoload 'infodoc-theme)
 (load-theme 'infodoc t t)
 (enable-theme 'infodoc)
 
+;;; ace-windows
+(use-package ace-window
+  :ensure t
+  :init
+  (progn
+    ;; replace the `other-window` key for 'ace-window
+    (global-set-key [remap other-window] 'ace-window)
+    ;; set the ace-window's background faces
+    (custom-set-faces
+     '(aw-leading-char-face
+       ((t (:inherit ace-jump-face-foreground :height 3.0)))))))

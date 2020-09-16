@@ -91,12 +91,17 @@
   :config
   (progn
     (global-company-mode t)
+    (setq company-auto-complete t)
     (setq company-idle-delay 0)
     (setq company-show-numbers t)
     (setq company-minimum-prefix-length 1)
     (setq company-dabbrev-downcase nil)
+    (setq company-auto-complete 'company-explicit-action-p)
     (setq company-capf--current-completion-data 'geiser)
     (add-hook 'after-init-hook 'global-company-mode)))
+(define-key company-active-map (kbd "RET") nil)
+(define-key company-active-map (kbd "<return>") nil)
+(define-key company-active-map (kbd "<tab>") #'company-complete-selection)
 
 ;; Geiser
 (use-package geiser
@@ -139,3 +144,4 @@
     (custom-set-faces
      '(aw-leading-char-face
        ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
+

@@ -110,7 +110,8 @@
   (progn
     (setq scheme-program-name "scheme")
     (setq geiser-chez-binary "scheme")
-    (setq geiser-active-implementations '(chez))))
+    (setq geiser-active-implementations '(chez))
+    (setq geiser-repl-query-on-kill-p nil)))
 
 
 ;; Auto-load paredit

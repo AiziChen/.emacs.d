@@ -46,7 +46,8 @@
 	mac-command-modifier 'meta
 	mac-option-modifier 'none)
   ;; Default binary location
-  (add-to-list 'exec-path "/usr/local/bin"))
+  (add-to-list 'exec-path "/usr/local/bin")
+  (add-to-list 'exec-path "/Applications/Racket v7.8/bin"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -114,7 +115,7 @@
   (progn
     (setq scheme-program-name "scheme")
     (setq geiser-chez-binary "scheme")
-    (setq geiser-active-implementations '(chez))
+    (setq geiser-active-implementations '(racket chez))
     (setq geiser-repl-query-on-kill-p nil)))
 
 
@@ -151,6 +152,3 @@
      '(aw-leading-char-face
        ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
 
-;;; racket-mode
-(use-package racket-mode
-  :ensure t)

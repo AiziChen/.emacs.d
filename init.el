@@ -66,15 +66,19 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages '(ace-window paredit geiser company org-bullets)))
+ '(package-selected-packages
+   '(racket-mode ace-window paredit geiser company org-bullets)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0)))))
 
 
+;; Install use-package if it hasn't been installed
+(when (not (package-installed-p 'use-package))
+  (package-install 'use-package))
 ;; Initial the 'use-package package
 (require 'use-package)
 
@@ -125,7 +129,8 @@
     (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
     (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
     (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
-    (add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
+    (add-hook 'slime-repl-mode-hook       (lambda () (paredit-mode +1)))
+    (add-hook 'racket-mode-hook           #'enable-paredit-mode)
     ))
 
 ;;; Themes
@@ -146,3 +151,6 @@
      '(aw-leading-char-face
        ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
 
+;;; racket-mode
+(use-package racket-mode
+  :ensure t)

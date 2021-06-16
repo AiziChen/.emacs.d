@@ -10,8 +10,8 @@
 ;;	     '("melpa" . "https://melpa.org/packages/") t)
 (setq package-archives
       '(("melpa" . "http://elpa.emacs-china.org/melpa/")
-	("gun" . "http://elpa.emacs-china.org/melpa/")))
-;(package-refresh-contents)
+	      ("gun" . "http://elpa.emacs-china.org/melpa/")))
+;;(package-refresh-contents)
 (package-initialize)
 ;; auto-load the packages path
 (add-to-list 'load-path "~/.emacs.d/PACKAGES/")
@@ -20,11 +20,13 @@
 ;; BASE SETTINGS
 ;; No-backup files
 (setq make-backup-files nil)
-;(global-prettify-symbols-mode 1)
+;; If have backup files, store it in ~/.emacs-backup-files
+(setq backup-directory-alist '(("." . "~/.emacs-backup-files")))
+;;(global-prettify-symbols-mode 1)
 ;; Font style and size
 (cond
  ((string-equal system-type "darwin")
-  (set-frame-font "JetBrains Mono-15" t t))
+  (set-frame-font "Dank Mono-20" t t))
  ((string-equal system-type "windows-nt")
   (set-frame-font "Consolas-14" t t)))
 ;; Windows size and position on emacs startup
@@ -40,14 +42,47 @@
 (show-paren-mode t)
 ;; For the darwin systems
 (when (string-equal system-type "darwin")
+  ;; Remove GUI elements.  Menu bar not removed because it makes the
+  ;; emacs-mac port ignore Spaces.  Not a problem on macOS, but
+  ;; potentially an issue on other platforms.
+  (dolist (mode '(blink-cursor-mode
+                  tool-bar-mode
+                  tooltip-mode
+                  scroll-bar-mode))
+    (when (fboundp mode)
+      (funcall mode -1)))
   ;; Exchange the command-key and the meta-key
   (setq mac-option-key-is-meta nil
-	mac-command-key-is-meta t
-	mac-command-modifier 'meta
-	mac-option-modifier 'none)
+	      mac-command-key-is-meta t
+	      mac-command-modifier 'meta
+	      mac-option-modifier 'none)
   ;; Default binary location
   (add-to-list 'exec-path "/usr/local/bin")
-  (add-to-list 'exec-path "/Applications/Racket v7.8/bin"))
+  (add-to-list 'exec-path "/Applications/Racket v8.1/bin"))
+
+(setq
+ ;; No bell of any kind.
+ ring-bell-function (lambda ())
+ visible-bell nil
+ ;; Make scrolling behave like it does in VIM.
+ scroll-margin 3
+ scroll-step 1
+ scroll-conservatively 10000
+ scroll-preserve-screen-position 1
+ ;; Improved scrolling when using the trackpad.
+ mouse-wheel-follow-mouse 't
+ mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+
+
+(setq-default
+ ;; Never use tabs.
+ indent-tabs-mode nil
+ ;; When using tabs, then should be 2 spaces long.
+ tab-width 2
+ ;; Don't wrap long lines.
+ truncate-lines t)
+;; Use y and n instead of yes and no.
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -59,16 +94,16 @@
 (set-face-foreground 'paren-face "DimGray")
 
 ;; load sbcl package
-;(load (expand-file-name "c:/Users/Administrator/quicklisp/slime-helper.el"))
+;;(load (expand-file-name "c:/Users/Administrator/quicklisp/slime-helper.el"))
 ;; Replace "sbcl" with the path to your implementation
-;(setq inferior-lisp-program "sbcl")
+;;(setq inferior-lisp-program "sbcl")
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(racket-mode ace-window paredit geiser company org-bullets)))
+   '(geiser-chez racket-mode ace-window paredit geiser company org-bullets)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -86,23 +121,24 @@
 
 ;; Org-mode settings
 (use-package org-bullets
-	     :ensure t
-	     :config
-	     (add-hook 'org-mode-hook
-		       (lambda () (org-bullets-mode 1))))
+	:ensure t
+	:config
+	(add-hook 'org-mode-hook
+		        (lambda () (org-bullets-mode 1))))
+
 ;; Company mode
 (use-package company
   :ensure t
   :config
   (progn
     (global-company-mode t)
-    (setq company-auto-complete t)
-    (setq company-idle-delay 0)
-    (setq company-show-numbers t)
-    (setq company-minimum-prefix-length 1)
-    (setq company-dabbrev-downcase nil)
-    (setq company-auto-complete 'company-explicit-action-p)
-    (setq company-capf--current-completion-data 'geiser)
+    (setq company-auto-complete t
+          company-idle-delay 0
+          company-show-numbers t
+          company-minimum-prefix-length 1
+          company-dabbrev-downcase nil
+          company-auto-complete 'company-explicit-action-p
+          company-capf--current-completion-data 'geiser)
     (add-hook 'after-init-hook 'global-company-mode)))
 (define-key company-active-map (kbd "RET") nil)
 (define-key company-active-map (kbd "<return>") nil)
@@ -116,6 +152,7 @@
     (setq scheme-program-name "scheme")
     (setq geiser-chez-binary "scheme")
     (setq geiser-active-implementations '(racket chez))
+    (setq geiser-implementations-alist '(racket))
     (setq geiser-repl-query-on-kill-p nil)))
 
 
@@ -132,11 +169,22 @@
     (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
     (add-hook 'slime-repl-mode-hook       (lambda () (paredit-mode +1)))
     (add-hook 'racket-mode-hook           #'enable-paredit-mode)
+    (dolist (m '(emacs-lisp-mode-hook
+	               racket-mode-hook
+	               racket-repl-mode-hook))
+      (add-hook m #'paredit-mode))
+    (bind-keys :map paredit-mode-map
+	             ("{"   . paredit-open-curly)
+	             ("}"   . paredit-close-curly))
+    (unless terminal-frame
+      (bind-keys :map paredit-mode-map
+	               ("M-[" . paredit-wrap-square)
+	               ("M-{" . paredit-wrap-curly)))
     ))
 
 ;;; Themes
 (require 'infodoc-theme)
-;(autoload 'infodoc-theme)
+;;(autoload 'infodoc-theme)
 (load-theme 'infodoc t t)
 (enable-theme 'infodoc)
 

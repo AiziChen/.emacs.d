@@ -1,0 +1,1 @@
+("8.1" ta6osx ("fff8d290554d6d70c464952201824dca91d9d08d" . "b9c09a5777780d059627807f00cc244ce010ff0d") (collects #"racket" #"runtime-config.rkt") (collects #"racket" #"syntax.rkt") (collects #"typed" #"racket" #"no-check" #"lang" #"reader.rkt") (collects #"typed" #"racket" #"no-check.rkt") (indirect collects #"syntax" #"define.rkt"))

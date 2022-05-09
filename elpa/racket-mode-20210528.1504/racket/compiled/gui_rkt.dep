@@ -1,1 +1,0 @@
-("8.1" ta6osx ("7bfa83fb14b03751a1e81f0fc8481ebce0ef9880" . "b11c393009932eb1e9a9740588a979c6287c3883") #"/Users/coq/.emacs.d/elpa/racket-mode-20210528.1504/racket/util.rkt" (collects #"at-exp" #"lang" #"reader.rkt") (collects #"racket" #"base.rkt") (collects #"racket" #"format.rkt") (collects #"racket" #"runtime-config.rkt"))

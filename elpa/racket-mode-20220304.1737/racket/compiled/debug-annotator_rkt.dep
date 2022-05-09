@@ -1,0 +1,1 @@
+("8.5" ta6osx ("e5c72053acc66d0dea0710c04b21dd2aa3b99e70" . "a8198f4255b262341ad6a596ca7cacb73230c8bb") (collects #"racket" #"base.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"syntax" #"kerncase.rkt"))

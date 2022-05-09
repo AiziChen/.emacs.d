@@ -1,1 +1,0 @@
-("8.1" ta6osx ("5c04e3798a3f873d7d47a5c2acc851fd8f7c7831" . "f63a756c7de382a07437bb0e29d30e29eea012d0") (collects #"gui-debugger" #"marks.rkt") (collects #"mzscheme" #"main.rkt") (collects #"racket" #"base.rkt") (collects #"racket" #"runtime-config.rkt") (collects #"syntax" #"kerncase.rkt"))

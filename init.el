@@ -9,8 +9,8 @@
 ;;(add-to-list 'package-archives
 ;;	     '("melpa" . "https://melpa.org/packages/") t)
 (setq package-archives
-      '(("melpa" . "http://elpa.emacs-china.org/melpa/")
-	("gun" . "http://elpa.emacs-china.org/gnu/")))
+      '(("gnu"   . "http://elpa.zilongshanren.com/gnu/")
+        ("melpa" . "http://elpa.zilongshanren.com/melpa/")))
 ;;(package-refresh-contents)
 (package-initialize)
 ;; auto-load the packages path
@@ -32,6 +32,8 @@
 ;; Windows size and position on emacs startup
 (set-frame-size (selected-frame) 80 54)
 (set-frame-position (selected-frame) 658 0)
+(set-background-color "#000")
+(set-foreground-color "#fff")
 (savehist-mode 1)
 (setq auto-save 1)
 ;; Show line number
@@ -58,7 +60,7 @@
 	      mac-option-modifier 'none)
   ;; Default binary location
   (add-to-list 'exec-path "/usr/local/bin")
-  (add-to-list 'exec-path "/Applications/Racket v8.1/bin"))
+  (add-to-list 'exec-path "/Applications/Racket v8.5/bin"))
 
 (setq
  ;; No bell of any kind.
@@ -103,7 +105,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(geiser-chez racket-mode ace-window paredit geiser company org-bullets)))
+   '(flycheck lsp-ui lsp-mode geiser-chez racket-mode ace-window paredit geiser company org-bullets)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -151,8 +153,8 @@
   (progn
     (setq scheme-program-name "scheme")
     (setq geiser-chez-binary "scheme")
-    (setq geiser-active-implementations '(racket chez))
-    (setq geiser-implementations-alist '(racket))
+    (setq geiser-active-implementations '(chez))
+    (setq geiser-implementations-alist '(chez))
     (setq geiser-repl-query-on-kill-p nil)))
 
 
@@ -183,10 +185,10 @@
     ))
 
 ;;; Themes
-(require 'infodoc-theme)
+;(require 'infodoc-theme)
 ;;(autoload 'infodoc-theme)
-(load-theme 'infodoc t t)
-(enable-theme 'infodoc)
+;(load-theme 'infodoc t t)
+;(enable-theme 'infodoc)
 
 ;;; ace-windows
 (use-package ace-window
@@ -199,4 +201,28 @@
     (custom-set-faces
      '(aw-leading-char-face
        ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
+
+
+(require 'flycheck)
+
+(require 'company)
+(setq company-minimum-prefix-length 1)
+(setq company-idle-delay 0.0)
+
+(require 'lsp-mode)
+(setq lsp-prefer-capf t)
+(setq lsp-prefer-flymake nil)
+(setq lsp-enable-snippet nil)
+(setq lsp-idle-delay 0.100)
+
+(require 'lsp-ui)
+(add-hook 'lsp-mode-hook 'lsp-ui-mode)
+(add-hook 'scheme-mode-hook 'flycheck-mode)
+
+(setq gc-cons-threshold 100000000)
+(setq read-process-output-max (* 1024 1024))
+
+(add-to-list 'load-path "~/.emacs.d/swish-lint")
+(add-to-list 'exec-path "~/.emacs.d/swish-lint")
+(require 'lsp-swish)
 

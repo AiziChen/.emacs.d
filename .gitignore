@@ -3,3 +3,6 @@ history
 eshell/
 auto-save-list/
 swish-lint/
+racket-mode/
+elpa/
+transient

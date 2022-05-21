@@ -156,6 +156,13 @@
     (setq geiser-active-implementations '(chez))
     (setq geiser-implementations-alist '(chez))
     (setq geiser-repl-query-on-kill-p nil)))
+;; Geiser chez
+(use-package geiser-chez
+  :ensure t)
+
+;; racket mode
+(use-package racket-mode
+  :ensure t)
 
 
 ;; Auto-load paredit
@@ -203,25 +210,41 @@
        ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
 
 
-(require 'flycheck)
+;; flycheck
+(use-package flycheck
+  :ensure t)
 
-(require 'company)
-(setq company-minimum-prefix-length 1)
-(setq company-idle-delay 0.0)
+;; company
+(use-package company
+  :ensure t
+  :init
+  (progn
+    (setq company-minimum-prefix-length 1)
+    (setq company-idle-delay 0.0)))
 
-(require 'lsp-mode)
-(setq lsp-prefer-capf t)
-(setq lsp-prefer-flymake nil)
-(setq lsp-enable-snippet nil)
-(setq lsp-idle-delay 0.100)
+;; lsp(lang-server protocal) mode
+(use-package lsp-mode
+  :ensure t
+  :init
+  (progn
+    (setq lsp-prefer-capf t)
+    (setq lsp-prefer-flymake nil)
+    (setq lsp-enable-snippet nil)
+    (setq lsp-idle-delay 0.100)
+    (require 'lsp-mode)))
 
-(require 'lsp-ui)
-(add-hook 'lsp-mode-hook 'lsp-ui-mode)
-(add-hook 'scheme-mode-hook 'flycheck-mode)
+;; lsp ui
+(use-package lsp-ui
+  :ensure t
+  :init
+  (progn
+    (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+    (add-hook 'scheme-mode-hook 'flycheck-mode)))
 
 (setq gc-cons-threshold 100000000)
 (setq read-process-output-max (* 1024 1024))
 
+;; lsp-swish
 (add-to-list 'load-path "~/.emacs.d/swish-lint")
 (add-to-list 'exec-path "~/.emacs.d/swish-lint")
 (require 'lsp-swish)

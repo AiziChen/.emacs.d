@@ -42,24 +42,27 @@
 (setq tab-always-indent 'complete)
 ;; Matches parenthesis
 (show-paren-mode t)
-;; For the darwin systems
+
+;; Remove GUI elements.  Menu bar not removed because it makes the
+;; emacs-mac port ignore Spaces.  Not a problem on macOS, but
+;; potentially an issue on other platforms.
+(dolist (mode '(blink-cursor-mode
+                menu-bar-mode
+                tool-bar-mode
+                tooltip-mode
+                scroll-bar-mode))
+  (when (fboundp mode)
+    (funcall mode -1)))
+
+;; Exchange the command-key and the meta-key
+(setq mac-option-key-is-meta nil
+	    mac-command-key-is-meta t
+	    mac-command-modifier 'meta
+	    mac-option-modifier 'none)
+
+;; Default binary location
+(add-to-list 'exec-path "/usr/local/bin")
 (when (string-equal system-type "darwin")
-  ;; Remove GUI elements.  Menu bar not removed because it makes the
-  ;; emacs-mac port ignore Spaces.  Not a problem on macOS, but
-  ;; potentially an issue on other platforms.
-  (dolist (mode '(blink-cursor-mode
-                  tool-bar-mode
-                  tooltip-mode
-                  scroll-bar-mode))
-    (when (fboundp mode)
-      (funcall mode -1)))
-  ;; Exchange the command-key and the meta-key
-  (setq mac-option-key-is-meta nil
-	      mac-command-key-is-meta t
-	      mac-command-modifier 'meta
-	      mac-option-modifier 'none)
-  ;; Default binary location
-  (add-to-list 'exec-path "/usr/local/bin")
   (add-to-list 'exec-path "/Applications/Racket v8.5/bin"))
 
 (setq

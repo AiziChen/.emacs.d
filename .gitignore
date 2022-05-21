@@ -6,3 +6,5 @@ swish-lint/
 racket-mode/
 elpa/
 transient/
+
+*.lsp-session-*

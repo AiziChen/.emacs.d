@@ -9,8 +9,8 @@
 ;;(add-to-list 'package-archives
 ;;	     '("melpa" . "https://melpa.org/packages/") t)
 (setq package-archives
-      '(("gnu"   . "http://elpa.zilongshanren.com/gnu/")
-        ("melpa" . "http://elpa.zilongshanren.com/melpa/")))
+      '(("gnu"   . "https://elpa.gnu.org/packages/")
+        ("melpa" . "https://melpa.org/packages/")))
 ;;(package-refresh-contents)
 (package-initialize)
 ;; auto-load the packages path

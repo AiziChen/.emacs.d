@@ -37,7 +37,7 @@
 (savehist-mode 1)
 (setq auto-save 1)
 ;; Show line number
-(global-linum-mode 1)
+(global-display-line-numbers-mode 1)
 ;; Use tab to complete first
 (setq tab-always-indent 'complete)
 ;; Matches parenthesis

@@ -16,24 +16,20 @@
 ;; auto-load the packages path
 (add-to-list 'load-path "~/.emacs.d/PACKAGES/")
 
-
 ;; BASE SETTINGS
 ;; No-backup files
 (setq make-backup-files nil)
 ;; If have backup files, store it in ~/.emacs-backup-files
 (setq backup-directory-alist '(("." . "~/.emacs-backup-files")))
 ;;(global-prettify-symbols-mode 1)
-;; Font style and size
+;; set default font (cant be font with hyphen in the name like Consolas)
 (cond
  ((string-equal system-type "darwin")
-  (set-frame-font "Dank Mono-20" t t))
+  (setq initial-frame-alist '((font . "Dank Mono-20")))
+  (setq default-frame-alist '((font . "Dank Mono-20"))))
  ((string-equal system-type "windows-nt")
-  (set-frame-font "Consolas-14" t t)))
-;; Windows size and position on emacs startup
-(set-frame-size (selected-frame) 108 38)
-(set-frame-position (selected-frame) 658 0)
-(set-background-color "#000")
-(set-foreground-color "#fff")
+  (setq initial-frame-alist '((font . "Consolas")))
+  (setq default-frame-alist '((font . "Consolas")))))
 (savehist-mode 1)
 (setq auto-save 1)
 ;; Show line number
@@ -89,6 +85,44 @@
  truncate-lines t)
 ;; Use y and n instead of yes and no.
 (defalias 'yes-or-no-p 'y-or-n-p)
+
+
+;;; For daemon configurations
+;; if gui do something in whatver type of emacs instance we are using
+(defun apply-if-gui (&rest action)
+  "Do specified ACTION if we're in a gui regardless of daemon or not."
+  (if (daemonp)
+      (add-hook 'after-make-frame-functions
+                (lambda (frame)
+                  (select-frame frame)
+                  (if (display-graphic-p frame)
+                      (apply action))))
+    (if (display-graphic-p)
+        (apply action))))
+
+(defun styling/set-backup-fonts ()
+  "Set the emoji and glyph fonts."
+  (set-fontset-font t 'symbol "Apple Color Emoji" nil 'prepend)
+  (set-fontset-font t 'symbol "Noto Color Emoji" nil 'prepend)
+  (set-fontset-font t 'symbol "Segoe UI Emoji" nil 'prepend)
+  (set-fontset-font t 'symbol "UbuntuMono Nerd Font" nil 'prepend))
+
+(defun set-frame-color ()
+  "Set frame colors"
+  (set-background-color "#000")
+  (set-foreground-color "#fff"))
+
+(defun set-frame-extras ()
+  "Windows size and position on emacs startup"
+  (set-frame-size (selected-frame) 108 38)
+  (set-frame-position (selected-frame) 658 0))
+
+;; respect default terminal fonts
+;; if we're in a gui set the fonts appropriately
+;; for daemon sessions and and nondaemons
+(apply-if-gui 'styling/set-backup-fonts)
+(apply-if-gui 'set-frame-color)
+(apply-if-gui 'set-frame-extras)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;

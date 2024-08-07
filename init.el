@@ -250,11 +250,25 @@
   :ensure t
   :init
   (progn
+    (setq lsp-completion-provider 'company-mode)
+    (setq lsp-completion-show-detail t)
+    (setq lsp-completion-show-kind t)
+    (setq lsp-completion-show-label-description t)
     (setq lsp-prefer-capf t)
     (setq lsp-prefer-flymake nil)
-    (setq lsp-enable-snippet nil)
+    (setq lsp-enable-snippet t)
+    (setq lsp-ui-doc-enable t)
+    (setq lsp-ui-doc-show-with-cursor nil)
+    (setq lsp-ui-doc-show-with-mouse t)
+    (setq lsp-lens-enable t)
+    (setq lsp-headerline-breadcrumb-enable t)
+    (setq lsp-diagnostics-provider 'flycheck)
+    (setq lsp-eldoc-enable-hover t)
+    (setq lsp-modeline-diagnostics-enable t)
     (setq lsp-idle-delay 0.100)
-    (require 'lsp-mode)))
+    (require 'lsp-mode)
+    (add-hook 'c-mode-hook 'lsp)
+    (add-hook 'c++-mode-hook 'lsp)))
 
 ;; lsp ui
 (use-package lsp-ui

@@ -1,4 +1,4 @@
-;; editor normal settings
+;; editor normal settings  -*- lexical-binding: t; -*-
 ;; no backup files
 
 ;; Added by Package.el.  This must come before configurations of
@@ -30,14 +30,14 @@
  ((string-equal system-type "windows-nt")
   (set-frame-font "Consolas-14" t t)))
 ;; Windows size and position on emacs startup
-(set-frame-size (selected-frame) 80 54)
+(set-frame-size (selected-frame) 108 38)
 (set-frame-position (selected-frame) 658 0)
 (set-background-color "#000")
 (set-foreground-color "#fff")
 (savehist-mode 1)
 (setq auto-save 1)
 ;; Show line number
-(global-linum-mode 1)
+(global-display-line-numbers-mode t)
 ;; Use tab to complete first
 (setq tab-always-indent 'complete)
 ;; Matches parenthesis
@@ -63,7 +63,7 @@
 ;; Default binary location
 (add-to-list 'exec-path "/usr/local/bin")
 (when (string-equal system-type "darwin")
-  (add-to-list 'exec-path "/Applications/Racket v8.5/bin"))
+  (add-to-list 'exec-path "/Applications/Racket v8.12/bin"))
 
 (setq
  ;; No bell of any kind.
@@ -74,6 +74,7 @@
  scroll-step 1
  scroll-conservatively 10000
  scroll-preserve-screen-position 1
+ pixel-scroll-precision-mode 1
  ;; Improved scrolling when using the trackpad.
  mouse-wheel-follow-mouse 't
  mouse-wheel-scroll-amount '(1 ((shift) . 1)))
@@ -108,7 +109,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(flycheck lsp-ui lsp-mode geiser-chez racket-mode ace-window paredit geiser company org-bullets)))
+   '(flycheck lsp-ui lsp-mode racket-mode ace-window paredit company org-bullets)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -142,26 +143,12 @@
           company-show-numbers t
           company-minimum-prefix-length 1
           company-dabbrev-downcase nil
-          company-auto-complete 'company-explicit-action-p
-          company-capf--current-completion-data 'geiser)
+          company-auto-complete 'company-explicit-action-p)
     (add-hook 'after-init-hook 'global-company-mode)))
 (define-key company-active-map (kbd "RET") nil)
 (define-key company-active-map (kbd "<return>") nil)
 (define-key company-active-map (kbd "<tab>") #'company-complete-selection)
 
-;; Geiser
-(use-package geiser
-  :ensure t
-  :config
-  (progn
-    (setq scheme-program-name "scheme")
-    (setq geiser-chez-binary "scheme")
-    (setq geiser-active-implementations '(chez))
-    (setq geiser-implementations-alist '(chez))
-    (setq geiser-repl-query-on-kill-p nil)))
-;; Geiser chez
-(use-package geiser-chez
-  :ensure t)
 
 ;; racket mode
 (use-package racket-mode
@@ -196,7 +183,6 @@
 
 ;;; Themes
 ;(require 'infodoc-theme)
-;;(autoload 'infodoc-theme)
 ;(load-theme 'infodoc t t)
 ;(enable-theme 'infodoc)
 
@@ -251,4 +237,10 @@
 (add-to-list 'load-path "~/.emacs.d/swish-lint")
 (add-to-list 'exec-path "~/.emacs.d/swish-lint")
 (require 'lsp-swish)
+
+(add-hook 'scheme-mode-hook
+          (lambda ()
+            (define-key paredit-mode-map (kbd "M-q") 'swish-indent-sexp)
+            ;(local-set-key (kbd "M-q") 'swish-indent-sexp)
+            ))
 

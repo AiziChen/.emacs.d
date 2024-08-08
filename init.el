@@ -143,7 +143,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(erlang flycheck lsp-ui lsp-mode racket-mode ace-window paredit company org-bullets)))
+   '(yasnippet erlang flycheck lsp-ui lsp-mode racket-mode ace-window paredit company org-bullets)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -292,8 +292,17 @@
             ;(local-set-key (kbd "M-q") 'swish-indent-sexp)
             ))
 
+;;; Need to install erlang_ls language server from `https://github.com/erlang-ls/erlang_ls`
 (use-package erlang
   :ensure t
   :init
   (progn
     (add-hook 'erlang-mode-hook #'lsp)))
+
+;;; yasnippet
+(use-package yasnippet
+  :ensure t
+  :init
+  (progn
+    (yas-reload-all)
+    (add-hook 'prog-mode-hook #'yas-minor-mode))) 

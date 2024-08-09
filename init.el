@@ -143,7 +143,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(yasnippet erlang flycheck lsp-ui lsp-mode racket-mode ace-window paredit company org-bullets)))
+   '(which-key yasnippet erlang flycheck lsp-ui lsp-mode racket-mode ace-window paredit company org-bullets)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -265,7 +265,7 @@
     (setq lsp-diagnostics-provider 'flycheck)
     (setq lsp-eldoc-enable-hover t)
     (setq lsp-modeline-diagnostics-enable t)
-    (setq lsp-idle-delay 0.100)
+    (setq lsp-idle-delay 0.0)
     (require 'lsp-mode)
     (add-hook 'c-mode-hook 'lsp)
     (add-hook 'c++-mode-hook 'lsp)))
@@ -297,7 +297,12 @@
   :ensure t
   :init
   (progn
-    (add-hook 'erlang-mode-hook #'lsp)))
+    (add-hook 'erlang-mode-hook #'lsp)
+    ;; electric command only activate in newline
+    (setq erlang-electric-commands '(erlang-electric-newline))
+    ;; does not inhibit electric in newline
+    (setq erlang-electric-newline-inhibit-list nil)
+    (setq erlang-electric-newline-inhibit nil)))
 
 ;;; yasnippet
 (use-package yasnippet
@@ -306,3 +311,26 @@
   (progn
     (yas-reload-all)
     (add-hook 'prog-mode-hook #'yas-minor-mode))) 
+;;; which-key
+(use-package which-key
+  :ensure t
+  :init
+  (progn
+    (add-hook 'erlang-mode-hook 'which-key-mode)
+    (with-eval-after-load 'lsp-mode
+      (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
+    ;; Allow C-h to trigger which-key before it is done automatically
+    (setq which-key-show-early-on-C-h t)
+    ;; make sure which-key doesn't show normally but refreshes quickly after it is
+    ;; triggered.
+    (setq which-key-idle-delay 10000)
+    (setq which-key-idle-secondary-delay 0.0)))
+
+;; Always show diagnostics at the bottom, using 1/3 of the available space
+(add-to-list 'display-buffer-alist
+             `(,(rx bos "*Flycheck errors*" eos)
+               (display-buffer-reuse-window
+                display-buffer-in-side-window)
+               (side            . bottom)
+               (reusable-frames . visible)
+               (window-height   . 0.33)))
